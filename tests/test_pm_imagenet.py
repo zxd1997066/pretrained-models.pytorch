@@ -32,7 +32,7 @@ def test_pm_imagenet(model_name, pretrained):
 
     tensor = utils.TransformImage(net)(img)
     tensor = tensor.unsqueeze(0)
-    x = Variable(tensor, requires_grad=False)
+    x = Variable(tensor, requires_grad=True)
 
     out_logits = net(x)
     if 'squeezenet' in model_name:

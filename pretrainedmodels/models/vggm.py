@@ -98,7 +98,7 @@ class VGGM(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
-        x = x.view(x.size(0), -1)
+        x = x.reshape(x.size(0), -1)
         x = self.classif(x)
         return x
 
@@ -119,3 +119,4 @@ def vggm(num_classes=1000, pretrained='imagenet'):
     else:
         model = VGGM(num_classes=num_classes)
     return model
+

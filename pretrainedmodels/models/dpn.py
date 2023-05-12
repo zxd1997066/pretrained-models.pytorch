@@ -404,28 +404,50 @@ def pooling_factor(pool_type='avg'):
     return 2 if pool_type == 'avgmaxc' else 1
 
 
+# def adaptive_avgmax_pool2d(x, pool_type='avg', padding=0, count_include_pad=False):
+#     """Selectable global pooling function with dynamic input kernel size
+#     """
+#     if pool_type == 'avgmaxc':
+#         x = torch.cat([
+#             F.avg_pool2d(
+#                 x, kernel_size=(x.size(2), x.size(3)), padding=padding, count_include_pad=count_include_pad),
+#             F.max_pool2d(x, kernel_size=(x.size(2), x.size(3)), padding=padding)
+#         ], dim=1)
+#     elif pool_type == 'avgmax':
+#         x_avg = F.avg_pool2d(
+#                 x, kernel_size=(x.size(2), x.size(3)), padding=padding, count_include_pad=count_include_pad)
+#         x_max = F.max_pool2d(x, kernel_size=(x.size(2), x.size(3)), padding=padding)
+#         x = 0.5 * (x_avg + x_max)
+#     elif pool_type == 'max':
+#         x = F.max_pool2d(x, kernel_size=(x.size(2), x.size(3)), padding=padding)
+#     else:
+#         if pool_type != 'avg':
+#             print('Invalid pool type %s specified. Defaulting to average pooling.' % pool_type)
+#         x = F.avg_pool2d(
+#             x, kernel_size=(x.size(2), x.size(3)), padding=padding, count_include_pad=count_include_pad)
+#     return x
 def adaptive_avgmax_pool2d(x, pool_type='avg', padding=0, count_include_pad=False):
     """Selectable global pooling function with dynamic input kernel size
     """
     if pool_type == 'avgmaxc':
         x = torch.cat([
-            F.avg_pool2d(
-                x, kernel_size=(x.size(2), x.size(3)), padding=padding, count_include_pad=count_include_pad),
-            F.max_pool2d(x, kernel_size=(x.size(2), x.size(3)), padding=padding)
+            F.adaptive_avg_pool2d(
+                x, output_size=(1, 1)),
+            F.adaptive_max_pool2d(x, output_size=(1, 1))
         ], dim=1)
     elif pool_type == 'avgmax':
-        x_avg = F.avg_pool2d(
-                x, kernel_size=(x.size(2), x.size(3)), padding=padding, count_include_pad=count_include_pad)
-        x_max = F.max_pool2d(x, kernel_size=(x.size(2), x.size(3)), padding=padding)
+        x_avg = F.adaptive_avg_pool2d(
+                x, output_size=(1, 1))
+        x_max = F.adaptive_max_pool2d(x, output_size=(1, 1))
         x = 0.5 * (x_avg + x_max)
     elif pool_type == 'max':
-        x = F.max_pool2d(x, kernel_size=(x.size(2), x.size(3)), padding=padding)
+        x = F.adaptive_max_pool2d(x, output_size=(1, 1))
     else:
         if pool_type != 'avg':
             print('Invalid pool type %s specified. Defaulting to average pooling.' % pool_type)
-        x = F.avg_pool2d(
-            x, kernel_size=(x.size(2), x.size(3)), padding=padding, count_include_pad=count_include_pad)
-    return x
+        x = F.adaptive_avg_pool2d(
+            x, output_size=(1, 1))
+    return x 
 
 
 class AdaptiveAvgMaxPool2d(torch.nn.Module):

@@ -1,5 +1,7 @@
-torch
-torchvision
-munch
+Pillow
+munch==2.5.1.dev12
 tqdm
-scipy
+six==1.16.0
+numpy
+# dataclasses==0.8
+typing-extensions==3.10.0.0

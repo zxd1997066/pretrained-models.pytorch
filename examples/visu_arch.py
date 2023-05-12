@@ -85,7 +85,7 @@ if __name__ == '__main__':
     for m in model.classifier:
         handles.append(m.register_forward_hook(print_info))
 
-    input = Variable(torch.randn(1,3,224,224).float(), requires_grad=False) # http://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html#sphx-glr-beginner-blitz-autograd-tutorial-py
+    input = Variable(torch.randn(1,3,224,224).float(), requires_grad=True) # http://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html#sphx-glr-beginner-blitz-autograd-tutorial-py
     output = model(input) # model(input) calls model.__call__(input) which calls model.forward(hook) and then calls the hooks
 
     for h in handles:
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     print('input size', input_data.size())
     print(input_data)
 
-    input = Variable(input_data, requires_grad=False)
+    input = Variable(input_data, requires_grad=True)
     output = model(input)
 
     print('output size', output.data.size())
@@ -188,7 +188,7 @@ if __name__ == '__main__':
     for m in model.features:
         handles.append(m.register_forward_hook(save_activation))
 
-    input = Variable(input_data, requires_grad=False)
+    input = Variable(input_data, requires_grad=True)
     output = model(input)
 
     for h in handles:

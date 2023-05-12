@@ -44,7 +44,7 @@ def extract_features_targets(model, features_size, loader, path_data, cuda=False
         if cuda:
             img = img.cuda(async=True)
 
-        input = Variable(img, requires_grad=False)
+        input = Variable(img, requires_grad=True)
         output = model(input)
 
         features[from_:to_] = output.data.cpu()
