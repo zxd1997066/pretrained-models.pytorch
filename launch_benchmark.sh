@@ -4,6 +4,7 @@ set -xe
 # pretrained-models
 function main {
     # prepare workload
+    workload_dir="${PWD}"
     source oob-common/common.sh
     init_params $@
     fetch_device_info
