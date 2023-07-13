@@ -4,4 +4,3 @@ tqdm
 six==1.16.0
 numpy
 # dataclasses==0.8
-typing-extensions==3.10.0.0
