@@ -85,7 +85,7 @@ parser.add_argument("--quantized_engine", type=str, default=None,
                     help="torch backend quantized engine.")
 parser.add_argument("--compile", action='store_true', default=False,
                     help="enable torch.compile")
-parser.add_argument("--backend", type=str, default=None,
+parser.add_argument("--backend", type=str, default='inductor',
                     help="enable torch.compile")
 
 parser.set_defaults(preserve_aspect_ratio=True)
@@ -294,10 +294,7 @@ def validate(val_loader, model, criterion, args):
     # switch to evaluate mode
     model.eval()
     if args.compile:
-        if args.backend:
-            model = torch.compile(model, backend=args.backend)
-        else:
-            model = torch.compile(model)
+        model = torch.compile(model, backend=args.backend, options={"freezing": True})
     image_size = pretrainedmodels.pretrained_settings[args.arch]["imagenet"]["input_size"]
     images = torch.randn(args.batch_size, *image_size)
     if args.channels_last:
