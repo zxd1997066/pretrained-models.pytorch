@@ -212,11 +212,11 @@ def main():
     if args.evaluate:
         if args.precision == "bfloat16":
             print('---- Enable AMP bfloat16')
-            with torch.cpu.amp.autocast(enabled=True, dtype=torch.bfloat16):
+            with torch.autocast(device_type="cuda" if torch.cuda.is_available() else "cpu", enabled=True, dtype=torch.bfloat16):
                 validate(val_loader, model, criterion, args)
         elif args.precision == "float16":
             print('---- Enable AMP float16')
-            with torch.cpu.amp.autocast(enabled=True, dtype=torch.half):
+            with torch.autocast(device_type="cuda" if torch.cuda.is_available() else "cpu", enabled=True, dtype=torch.half):
                 validate(val_loader, model, criterion, args)
         else:
             validate(val_loader, model, criterion, args)
