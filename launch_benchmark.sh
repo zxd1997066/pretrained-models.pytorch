@@ -14,6 +14,10 @@ function main {
     # pip install --no-deps torchvision -f https://download.pytorch.org/whl/torch_stable.html
     python setup.py install
 
+    if [ "${device}" == "cuda" ];then
+        addtion_options=${addtion_options}" --cuda "
+    fi
+
     # all pretrained models
     if [ "${model_name}" == "pretrained-models" ];then
         model_name="vggm,inceptionresnetv2,se_resnet50,dpn68,se_resnext50_32x4d,polynet,nasnetalarge,dpn131,senet154"

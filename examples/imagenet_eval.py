@@ -360,9 +360,6 @@ def validate(val_loader, model, criterion, args):
         if args.dummy:
             # image_size = pretrainedmodels.pretrained_settings[args.arch]["imagenet"]["input_size"]
             target = torch.arange(1, args.batch_size + 1).long()
-            if args.cuda:
-                images = images.cuda(args.gpu, non_blocking=True)
-                target = target.cuda(args.gpu, non_blocking=True)
             # print("Start convert to onnx!")
             # torch.onnx.export(model.module, images, args.arch + ".onnx", verbose=False)
             # print("End convert to onnx!")
@@ -379,8 +376,14 @@ def validate(val_loader, model, criterion, args):
                 ) as p:
                     for i in range(iterations + warmup):
                         start = time.time()
+                        if args.cuda:
+                            images = images.cuda(args.gpu, non_blocking=True)
+                            target = target.cuda(args.gpu, non_blocking=True)
                         output = model(images)
                         p.step()
+                        if args.cuda:
+                            images = images.cpu()
+                            target = target.cpu()
                         end = time.time()
                         elapsed = end - start
                         print("Iteration: {}, inference time: {} sec.".format(i, end - start), flush=True)
@@ -392,7 +395,13 @@ def validate(val_loader, model, criterion, args):
             else:
                 for i in range(iterations + warmup):
                     start = time.time()
+                    if args.cuda:
+                        images = images.cuda(args.gpu, non_blocking=True)
+                        target = target.cuda(args.gpu, non_blocking=True)
                     output = model(images)
+                    if args.cuda:
+                        images = images.cpu()
+                        target = target.cpu()
                     end = time.time()
                     elapsed = end - start
                     print("Iteration: {}, inference time: {} sec.".format(i, end - start), flush=True)
