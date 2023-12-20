@@ -377,8 +377,8 @@ def validate(val_loader, model, criterion, args):
                     for i in range(iterations + warmup):
                         start = time.time()
                         if args.cuda:
-                            images = images.cuda(args.gpu, non_blocking=True)
-                            target = target.cuda(args.gpu, non_blocking=True)
+                            images = images.cuda(non_blocking=True)
+                            target = target.cuda(non_blocking=True)
                         output = model(images)
                         p.step()
                         if args.cuda:
@@ -396,8 +396,8 @@ def validate(val_loader, model, criterion, args):
                 for i in range(iterations + warmup):
                     start = time.time()
                     if args.cuda:
-                        images = images.cuda(args.gpu, non_blocking=True)
-                        target = target.cuda(args.gpu, non_blocking=True)
+                        images = images.cuda(non_blocking=True)
+                        target = target.cuda(non_blocking=True)
                     output = model(images)
                     if args.cuda:
                         images = images.cpu()
