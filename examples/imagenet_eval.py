@@ -87,6 +87,8 @@ parser.add_argument("--compile", action='store_true', default=False,
                     help="enable torch.compile")
 parser.add_argument("--backend", type=str, default='inductor',
                     help="enable torch.compile")
+parser.add_argument("--triton_cpu", action='store_true', default=False,
+                    help="enable triton_cpu")
 
 parser.set_defaults(preserve_aspect_ratio=True)
 best_prec1 = 0
@@ -100,7 +102,10 @@ if args.quantized_engine is not None:
 else:
     args.quantized_engine = torch.backends.quantized.engine
 print("backends quantized engine is {}".format(torch.backends.quantized.engine))
-
+if args.triton_cpu:
+    print("run with triton cpu backend")
+    import torch._inductor.config
+    torch._inductor.config.cpu_backend="triton"
 if args.ipex:
     import intel_extension_for_pytorch as ipex
     print("import IPEX **************")
