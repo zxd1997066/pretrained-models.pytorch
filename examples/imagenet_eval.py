@@ -299,7 +299,12 @@ def validate(val_loader, model, criterion, args):
     # switch to evaluate mode
     model.eval()
     if args.compile:
-        model = torch.compile(model, backend=args.backend, options={"freezing": True})
+        if args.backend == "zentorch":
+            import zentorch
+            import torch
+            model = torch.compile(model, backend=args.backend, dynamic=False)
+        else:
+          model = torch.compile(model, backend=args.backend, options={"freezing": True})
     image_size = pretrainedmodels.pretrained_settings[args.arch]["imagenet"]["input_size"]
     images = torch.randn(args.batch_size, *image_size)
     if args.channels_last:
