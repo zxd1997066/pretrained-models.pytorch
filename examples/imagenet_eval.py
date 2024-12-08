@@ -298,6 +298,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
 def validate(val_loader, model, criterion, args):
     # switch to evaluate mode
     model.eval()
+    import torch
     if args.compile:
         if args.backend == "zentorch":
             import zentorch
